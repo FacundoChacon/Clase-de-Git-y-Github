@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Autos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background: #1e2a38;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .filtros input, .filtros select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-body h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #0a7cff;
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 12px;
+            background: #e0e7ff;
+            color: #1e40af;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #1e2a38;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚘 Catálogo de Autos</h1>
+    <p>Encuentra tu próximo vehículo</p>
+</header>
+
+<section class="filtros">
+    <input type="text" id="busqueda" placeholder="Buscar por modelo...">
+    <select id="marcaFiltro">
+        <option value="">Todas las marcas</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Ford">Ford</option>
+        <option value="BMW">BMW</option>
+        <option value="Chevrolet">Chevrolet</option>
+    </select>
+</section>
+
+<section class="catalogo" id="catalogo"></section>
+
+<footer>
+    © 2026 Catálogo de Autos | Diseño demo
+</footer>
+
+<script>
+    const autos = [
+        {
+            marca: "Toyota",
+            modelo: "Corolla 2022",
+            precio: 21000,
+            tipo: "Sedán",
+            imagen: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a"
+        },
+        {
+            marca: "Ford",
+            modelo: "Mustang GT",
+            precio: 45000,
+            tipo: "Deportivo",
+            imagen: "https://images.unsplash.com/photo-1583267746897-2cf415887172"
+        },
+        {
+            marca: "BMW",
+            modelo: "X5",
+            precio: 60000,
+            tipo: "SUV",
+            imagen: "https://images.unsplash.com/photo-1555215695-3004980ad54d"
+        },
+        {
+            marca: "Chevrolet",
+            modelo: "Onix 2023",
+            precio: 18000,
+            tipo: "Compacto",
+            imagen: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2"
+        },
+        {
+            marca: "Toyota",
+            modelo: "RAV4",
+            precio: 32000,
+            tipo: "SUV",
+            imagen: "https://images.unsplash.com/photo-1590362891991-f776e747a588"
+        }
+    ];
+
+    const catalogo = document.getElementById("catalogo");
+    const busquedaInput = document.getElementById("busqueda");
+    const marcaFiltro = document.getElementById("marcaFiltro");
+
+    function mostrarAutos(lista) {
+        catalogo.innerHTML = "";
+        lista.forEach(auto => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <img src="${auto.imagen}" alt="${auto.modelo}">
+                <div class="card-body">
+                    <h3>${auto.marca} ${auto.modelo}</h3>
+                    <div class="precio">$${auto.precio.toLocaleString()}</div>
+                    <span class="tag">${auto.tipo}</span>
+                </div>
+            `;
+            catalogo.appendChild(card);
+        });
+    }
+
+    function filtrarAutos() {
+        const texto = busquedaInput.value.toLowerCase();
+        const marca = marcaFiltro.value;
+
+        const filtrados = autos.filter(auto => {
+            const coincideTexto = auto.modelo.toLowerCase().includes(texto);
+            const coincideMarca = marca === "" || auto.marca === marca;
+            return coincideTexto && coincideMarca;
+        });
+
+        mostrarAutos(filtrados);
+    }
+
+    busquedaInput.addEventListener("input", filtrarAutos);
+    marcaFiltro.addEventListener("change", filtrarAutos);
+
+    mostrarAutos(autos);
+</script>
+
+</body>
+</html>
